@@ -20,5 +20,6 @@ public class CreditAccount {
     private Long monthlyPayment;
     private Integer interestRate;
     private Employee creditor;
+    @ToString.Exclude
     private PaymentAccount paymentAccount;
 }

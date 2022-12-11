@@ -1,15 +1,18 @@
 package tech.reliab.course.mennibayevat.bank.service.impl;
 
+import lombok.AllArgsConstructor;
 import tech.reliab.course.mennibayevat.bank.entity.Bank;
 import tech.reliab.course.mennibayevat.bank.entity.BankOffice;
+import tech.reliab.course.mennibayevat.bank.repository.BankOfficeRepository;
 import tech.reliab.course.mennibayevat.bank.service.BankOfficeService;
 import tech.reliab.course.mennibayevat.bank.service.BankService;
 import tech.reliab.course.mennibayevat.bank.utils.enums.BankOfficeStatus;
 
 import java.util.Random;
 
+@AllArgsConstructor
 public class BankOfficeServiceImpl implements BankOfficeService {
-    //TODO #1 private BankOfficeRepository bankOfficeRepository;
+    private BankOfficeRepository bankOfficeRepository;
     private BankService bankService;
     private static Long id = 0L;
 
@@ -21,7 +24,7 @@ public class BankOfficeServiceImpl implements BankOfficeService {
         Random random = new Random();
 
         var bankOffice = new BankOffice()
-                .setId(id)
+                .setId(id++)
                 .setName(name)
                 .setAddress(address)
                 .setStatus(BankOfficeStatus.getRandomStatus())
@@ -33,7 +36,7 @@ public class BankOfficeServiceImpl implements BankOfficeService {
                 .setMoneyStock(bank.getMoneyStock())
                 .setRental(random.nextInt(100_000))
                 .setBank(bank);
-        //TODO #1 bankOfficeRepository.save(bankOffice);
+        bankOfficeRepository.save(bankOffice);
         bankService.addBankOffice(bank);
 
         return bankOffice;
@@ -42,19 +45,19 @@ public class BankOfficeServiceImpl implements BankOfficeService {
     @Override
     public BankOffice getBankOffice() {
 
-        //TODO #1 return bankOfficeRepository.getEntity();
-        return null;
+        return bankOfficeRepository.getEntity();
     }
 
     @Override
     public void update(BankOffice bankOffice) {
 
-        //TODO #1 bankOfficeRepository.save(bankOffice);
+        bankOfficeRepository.save(bankOffice);
     }
 
     @Override
     public void delete(BankOffice bankOffice) {
-        //TODO #1 bankOfficeRepository.save(bankOffice);
+
+        bankOfficeRepository.save(bankOffice);
         bankService.deleteBankOffice(bankOffice.getBank());
     }
 }

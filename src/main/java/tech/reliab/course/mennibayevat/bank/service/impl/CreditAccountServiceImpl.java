@@ -1,29 +1,32 @@
 package tech.reliab.course.mennibayevat.bank.service.impl;
 
+import lombok.AllArgsConstructor;
 import tech.reliab.course.mennibayevat.bank.entity.CreditAccount;
 import tech.reliab.course.mennibayevat.bank.entity.Employee;
 import tech.reliab.course.mennibayevat.bank.entity.PaymentAccount;
 import tech.reliab.course.mennibayevat.bank.entity.User;
+import tech.reliab.course.mennibayevat.bank.repository.BankRepository;
+import tech.reliab.course.mennibayevat.bank.repository.CreditAccountRepository;
 import tech.reliab.course.mennibayevat.bank.service.CreditAccountService;
 
 import java.time.LocalDate;
 import java.time.Period;
 
+@AllArgsConstructor
 public class CreditAccountServiceImpl implements CreditAccountService {
-    //TODO #1
-    // private CreditAccountRepository creditAccountRepository;
-    // private BankRepository bankRepository;
+    private CreditAccountRepository creditAccountRepository;
+    private BankRepository bankRepository;
 
-    private static Long idGenerator = 0L;
+    private static Long id = 0L;
 
     @Override
     public CreditAccount create(User user, String bankName,
                                 LocalDate creditBegin, LocalDate creditEnd,
                                 Long creditAmount, Long mouthPayment,
                                 Employee employee, PaymentAccount paymentAccount) {
-        //TODO var bank = bankRepository.getByName(bankName);
+        var bank = bankRepository.getByName(bankName);
         var account = new CreditAccount()
-                .setId(idGenerator++)
+                .setId(id++)
                 .setUser(user)
                 .setBankName(bankName)
                 .setCreditStart(creditBegin)
@@ -35,7 +38,7 @@ public class CreditAccountServiceImpl implements CreditAccountService {
                 .setCreditor(employee)
                 .setPaymentAccount(paymentAccount);
 
-        //TODO creditAccountRepository.save(account);
+        creditAccountRepository.save(account);
 
         return account;
     }
@@ -43,19 +46,18 @@ public class CreditAccountServiceImpl implements CreditAccountService {
     @Override
     public CreditAccount getCreditAccount() {
 
-        //TODO return creditAccountRepository.getEntity();
-        return null;
+        return creditAccountRepository.getEntity();
     }
 
     @Override
     public void update(CreditAccount creditAccount) {
 
-        //TODO creditAccountRepository.save(creditAccount);
+        creditAccountRepository.save(creditAccount);
     }
 
     @Override
     public void delete(CreditAccount creditAccount) {
 
-        //TODO creditAccountRepository.delete(creditAccount);
+        creditAccountRepository.delete(creditAccount);
     }
 }

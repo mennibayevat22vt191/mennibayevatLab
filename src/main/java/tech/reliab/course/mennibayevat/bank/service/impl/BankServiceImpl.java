@@ -1,13 +1,17 @@
 package tech.reliab.course.mennibayevat.bank.service.impl;
 
+import lombok.AllArgsConstructor;
 import tech.reliab.course.mennibayevat.bank.entity.Bank;
+import tech.reliab.course.mennibayevat.bank.repository.BankRepository;
 import tech.reliab.course.mennibayevat.bank.service.BankService;
 
 import java.util.Random;
 
+@AllArgsConstructor
 public class BankServiceImpl implements BankService {
+    private final BankRepository bankRepository;
     private static Long id = 0L;
-    //TODO #1 private BankRepository bankRepository = new BankRepository()
+
 
     @Override
     public Bank createBank(String name) {
@@ -24,25 +28,25 @@ public class BankServiceImpl implements BankService {
                 .setRate(0)
                 .setMoneyStock(random.nextLong(1_000_000L))
                 .setInterestRate((int) (20 - (rate * 20) / 10D));
-        //TODO #1 bankRepository.save(bank)
+        bankRepository.save(bank);
 
         return bank;
     }
 
     @Override
     public Bank getBank() {
-        return null;
-        //TODO #1 return bankRepository.getBank;
+
+        return bankRepository.getEntity();
     }
 
     @Override
     public void update(Bank bank) {
-        //TODO #1 bankRepository.save(bank)
+        bankRepository.save(bank);
     }
 
     @Override
     public void delete(Bank bank) {
-        //TODO #1 bankRepository.delete(bank)
+        bankRepository.delete(bank);
     }
 
     /**

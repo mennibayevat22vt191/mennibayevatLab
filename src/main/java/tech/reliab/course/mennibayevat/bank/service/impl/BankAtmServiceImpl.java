@@ -1,17 +1,20 @@
 package tech.reliab.course.mennibayevat.bank.service.impl;
 
+import lombok.AllArgsConstructor;
 import tech.reliab.course.mennibayevat.bank.entity.Bank;
 import tech.reliab.course.mennibayevat.bank.entity.BankAtm;
 import tech.reliab.course.mennibayevat.bank.entity.BankOffice;
 import tech.reliab.course.mennibayevat.bank.entity.Employee;
+import tech.reliab.course.mennibayevat.bank.repository.BankAtmRepository;
 import tech.reliab.course.mennibayevat.bank.service.BankAtmService;
 import tech.reliab.course.mennibayevat.bank.service.BankService;
 import tech.reliab.course.mennibayevat.bank.utils.enums.BankAtmStatus;
 
 import java.util.Random;
 
+@AllArgsConstructor
 public class BankAtmServiceImpl implements BankAtmService {
-    //TODO #1 private BankAtmRepository bankAtmRepository;
+    private BankAtmRepository bankAtmRepository;
     private BankService bankService;
     private static Long id = 0L;
 
@@ -30,7 +33,7 @@ public class BankAtmServiceImpl implements BankAtmService {
                 .setMoneyStock(bank.getMoneyStock())
                 .setMaintenancePrice(random.nextInt(10000));
 
-        //TODO #1 bankAtmRepository.save(bankAtm);
+        bankAtmRepository.save(bankAtm);
         bankService.addAtm(bank);
 
         return bankAtm;
@@ -38,20 +41,22 @@ public class BankAtmServiceImpl implements BankAtmService {
 
     @Override
     public BankAtm getBankAtm() {
-        //TODO #1 return bankAtmRepository.getEntity();
-        return null;
+
+        return bankAtmRepository.getEntity();
     }
 
     @Override
     public void delete(BankAtm bankAtm) {
-        //TODO #1 bankAtmRepository.delete(bankAtm);
+
+        bankAtmRepository.delete(bankAtm);
         bankService.deleteAtm(bankAtm.getBankOwner());
 
     }
 
     @Override
     public void update(BankAtm bankAtm) {
-        //TODO #1 bankAtmRepository.save(bankAtm);
+
+        bankAtmRepository.save(bankAtm);
     }
 
 }

@@ -1,8 +1,11 @@
 package tech.reliab.course.mennibayevat.bank.service.impl;
 
+import lombok.AllArgsConstructor;
 import tech.reliab.course.mennibayevat.bank.entity.Bank;
 import tech.reliab.course.mennibayevat.bank.entity.Employee;
 import tech.reliab.course.mennibayevat.bank.entity.User;
+import tech.reliab.course.mennibayevat.bank.repository.EmployeeRepository;
+import tech.reliab.course.mennibayevat.bank.repository.UserRepository;
 import tech.reliab.course.mennibayevat.bank.service.BankService;
 import tech.reliab.course.mennibayevat.bank.service.CreditAccountService;
 import tech.reliab.course.mennibayevat.bank.service.PaymentAccountService;
@@ -13,9 +16,10 @@ import java.time.LocalDate;
 import java.util.Date;
 import java.util.Random;
 
+@AllArgsConstructor
 public class UserServiceImpl implements UserService {
-    //TODO #1 private UserRepository userRepository;
-    //TODO #1 private EmployeeRepository employeeRepository;
+    private UserRepository userRepository;
+    private EmployeeRepository employeeRepository;
     private BankService bankService;
     private PaymentAccountService paymentAccountService;
     private CreditAccountService creditAccountService;
@@ -43,16 +47,16 @@ public class UserServiceImpl implements UserService {
 
         var paymentAccount = paymentAccountService.create(user, bank.getName());
 
-        //TODO #1 var employee = employeeRepository.getEntity();
-//        var creditAccount = creditAccountService
-//                .create(user, bank.getName(),
-//                        LocalDate.now(), LocalDate.now(),
-//                        100_000L, 1000L,
-//                        employee, paymentAccount);
-//        user.setPaymentAccounts(paymentAccount);
-//        user.setCreditAccounts(creditAccount);
+        var employee = employeeRepository.getEntity();
+        var creditAccount = creditAccountService
+                .create(user, bank.getName(),
+                        LocalDate.now(), LocalDate.now(),
+                        100_000L, 1000L,
+                        employee, paymentAccount);
+        user.setPaymentAccounts(paymentAccount);
+        user.setCreditAccounts(creditAccount);
 
-        //TODO userRepository.save(user);
+        userRepository.save(user);
         bankService.addClient(bank);
 
         return user;
@@ -61,19 +65,19 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getUser() {
 
-        //TODO return userRepository.getEntity();
-        return null;
+        return userRepository.getEntity();
     }
 
     @Override
     public void update(User user) {
 
-        //TODO userRepository.save(user);
+        userRepository.save(user);
     }
 
     @Override
     public void delete(User user) {
-        //TODO #1 userRepository.delete(user);
+
+        userRepository.delete(user);
         bankService.deleteClient(user.getBanks());
     }
 }
