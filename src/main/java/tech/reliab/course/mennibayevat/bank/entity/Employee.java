@@ -2,13 +2,13 @@ package tech.reliab.course.mennibayevat.bank.entity;
 
 import java.util.Date;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+import lombok.experimental.Accessors;
 
-@Builder
-@Setter
-@Getter
+@Data
+@Accessors(chain = true)
+@NoArgsConstructor
+@ToString
 public class Employee {
     private Long id;
     private String fullName;

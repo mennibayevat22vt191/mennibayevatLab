@@ -1,12 +1,16 @@
 package tech.reliab.course.mennibayevat.bank.entity;
 
 import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+import lombok.experimental.Accessors;
 
-@Builder
-@Setter
-@Getter
+
+@Data
+@Accessors(chain = true)
+@NoArgsConstructor
+@ToString
 public class Bank {
     private Long id;
     private String name;

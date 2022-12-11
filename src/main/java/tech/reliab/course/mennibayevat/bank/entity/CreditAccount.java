@@ -1,20 +1,20 @@
 package tech.reliab.course.mennibayevat.bank.entity;
 
-import java.util.Date;
+import java.time.LocalDate;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+import lombok.experimental.Accessors;
 
-@Builder
-@Setter
-@Getter
+@Data
+@Accessors(chain = true)
+@NoArgsConstructor
+@ToString
 public class CreditAccount {
     private Long id;
     private User user;
     private String bankName;
-    private Date creditStart;
-    private Date creditEnd;
+    private LocalDate creditStart;
+    private LocalDate creditEnd;
     private Integer loanPeriod;
     private Long loanAmount;
     private Long monthlyPayment;
