@@ -1,22 +1,34 @@
 package tech.reliab.course.mennibayevat.bank.repository;
 
 import lombok.Getter;
+import tech.reliab.course.mennibayevat.bank.entity.CreditAccount;
 import tech.reliab.course.mennibayevat.bank.entity.PaymentAccount;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 @Getter
 public class PaymentAccountRepository implements Repository<PaymentAccount> {
 
-    private PaymentAccount entity;
+    private final ArrayList<PaymentAccount> entities = new ArrayList<>();
 
-    public void save(PaymentAccount entity) {
-        this.entity = entity;
+    public void addEntity(PaymentAccount entity) {
+        this.entities.add(entity);
     }
 
     public void delete(PaymentAccount entity) {
-        if (Objects.equals(this.entity, entity)) {
-            this.entity = null;
-        }
+        for (PaymentAccount account : this.entities)
+            if (Objects.equals(account, entity)) {
+                this.entities.set(Math.toIntExact(account.getId()), null);
+                break;
+            }
+    }
+
+    public void save(PaymentAccount entity) {
+        for (PaymentAccount account : this.entities)
+            if (Objects.equals(account, entity)) {
+                this.entities.set(Math.toIntExact(account.getId()), entity);
+                break;
+            }
     }
 }

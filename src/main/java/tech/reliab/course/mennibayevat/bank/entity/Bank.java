@@ -1,6 +1,5 @@
 package tech.reliab.course.mennibayevat.bank.entity;
 
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;

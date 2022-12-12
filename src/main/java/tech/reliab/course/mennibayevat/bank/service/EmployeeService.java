@@ -6,7 +6,7 @@ import tech.reliab.course.mennibayevat.bank.entity.Employee;
 
 public interface EmployeeService {
     Employee create(String fullName, String post, Bank bank, BankOffice office);
-    Employee getEmployee();
+    Employee getEmployeeById(Long id);
     void update(Employee employee);
     void delete(Employee employee);
 }

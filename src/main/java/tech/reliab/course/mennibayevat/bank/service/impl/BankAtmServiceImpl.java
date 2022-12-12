@@ -10,6 +10,7 @@ import tech.reliab.course.mennibayevat.bank.service.BankAtmService;
 import tech.reliab.course.mennibayevat.bank.service.BankService;
 import tech.reliab.course.mennibayevat.bank.utils.enums.BankAtmStatus;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 @AllArgsConstructor
@@ -33,16 +34,16 @@ public class BankAtmServiceImpl implements BankAtmService {
                 .setMoneyStock(bank.getMoneyStock())
                 .setMaintenancePrice(random.nextInt(10000));
 
-        bankAtmRepository.save(bankAtm);
+        bankAtmRepository.addEntity(bankAtm);
         bankService.addAtm(bank);
 
         return bankAtm;
     }
 
     @Override
-    public BankAtm getBankAtm() {
+    public BankAtm getAtmById(Long id) {
 
-        return bankAtmRepository.getEntity();
+        return bankAtmRepository.getById(id);
     }
 
     @Override

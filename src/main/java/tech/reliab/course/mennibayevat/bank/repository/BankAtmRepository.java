@@ -1,23 +1,47 @@
 package tech.reliab.course.mennibayevat.bank.repository;
 
 import lombok.Getter;
+import tech.reliab.course.mennibayevat.bank.entity.Bank;
 import tech.reliab.course.mennibayevat.bank.entity.BankAtm;
+import tech.reliab.course.mennibayevat.bank.entity.BankOffice;
+import tech.reliab.course.mennibayevat.bank.entity.Employee;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 @Getter
 public class BankAtmRepository implements Repository<BankAtm> {
 
-    private BankAtm entity;
+    private final ArrayList<BankAtm> atms = new ArrayList<>();
 
-
-    public void save(BankAtm entity) {
-        this.entity = entity;
+    public void addEntity(BankAtm entity) {
+        this.atms.add(entity);
     }
 
     public void delete(BankAtm entity) {
-        if (Objects.equals(this.entity, entity)) {
-            this.entity = null;
+        for (BankAtm bankAtm : this.atms) {
+            if (Objects.equals(bankAtm, entity)) {
+                this.atms.set(Math.toIntExact(bankAtm.getId()), null);
+                break;
+            }
         }
+    }
+
+    @Override
+    public void save(BankAtm entity) {
+        for (BankAtm bankAtm : this.atms) {
+            if (Objects.equals(bankAtm, entity)) {
+                this.atms.set(Math.toIntExact(bankAtm.getId()), entity);
+                break;
+            }
+        }
+    }
+
+    public BankAtm getById(Long id) {
+        for (BankAtm atm : this.atms) {
+            if(atm.getId().equals(id))
+                return atm;
+        }
+        return null;
     }
 }

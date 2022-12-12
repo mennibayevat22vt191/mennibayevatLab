@@ -36,16 +36,16 @@ public class BankOfficeServiceImpl implements BankOfficeService {
                 .setMoneyStock(bank.getMoneyStock())
                 .setRental(random.nextInt(100_000))
                 .setBank(bank);
-        bankOfficeRepository.save(bankOffice);
+        bankOfficeRepository.addEntity(bankOffice);
         bankService.addBankOffice(bank);
 
         return bankOffice;
     }
 
     @Override
-    public BankOffice getBankOffice() {
+    public BankOffice getBankOfficeByName(String name) {
 
-        return bankOfficeRepository.getEntity();
+        return bankOfficeRepository.getByName(name);
     }
 
     @Override
@@ -57,7 +57,7 @@ public class BankOfficeServiceImpl implements BankOfficeService {
     @Override
     public void delete(BankOffice bankOffice) {
 
-        bankOfficeRepository.save(bankOffice);
+        bankOfficeRepository.addEntity(bankOffice);
         bankService.deleteBankOffice(bankOffice.getBank());
     }
 }

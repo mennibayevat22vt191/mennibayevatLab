@@ -1,22 +1,42 @@
 package tech.reliab.course.mennibayevat.bank.repository;
 
 import lombok.Getter;
+import tech.reliab.course.mennibayevat.bank.entity.Bank;
 import tech.reliab.course.mennibayevat.bank.entity.BankOffice;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 @Getter
 public class BankOfficeRepository implements Repository<BankOffice> {
 
-    private BankOffice entity;
+    private final ArrayList<BankOffice> entities = new ArrayList<>();
 
-    public void save(BankOffice entity) {
-        this.entity = entity;
+    public void addEntity(BankOffice entity) {
+        this.entities.add(entity);
     }
 
     public void delete(BankOffice entity) {
-        if (Objects.equals(this.entity, entity)) {
-            this.entity = null;
+        for (BankOffice office : this.entities)
+            if (Objects.equals(office, entity)) {
+                this.entities.set(Math.toIntExact(office.getId()), null);
+                break;
+            }
+    }
+
+    public void save(BankOffice entity) {
+        for (BankOffice office : this.entities)
+            if (Objects.equals(office, entity)) {
+                this.entities.set(Math.toIntExact(office.getId()), entity);
+                break;
+            }
+    }
+
+    public BankOffice getByName(String name) {
+        for (BankOffice bankOffice : this.entities) {
+            if(bankOffice.getName().equals(name))
+                return bankOffice;
         }
+        return null;
     }
 }

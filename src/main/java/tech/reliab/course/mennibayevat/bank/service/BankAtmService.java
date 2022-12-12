@@ -7,7 +7,7 @@ import tech.reliab.course.mennibayevat.bank.entity.Employee;
 
 public interface BankAtmService {
     BankAtm create(String name, Bank bank, BankOffice office, Employee employee);
-    BankAtm getBankAtm();
+    BankAtm getAtmById(Long id);
     void delete(BankAtm bankAtm);
     void update(BankAtm bankAtm);
 }

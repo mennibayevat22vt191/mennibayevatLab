@@ -28,15 +28,14 @@ public class BankServiceImpl implements BankService {
                 .setRate(0)
                 .setMoneyStock(random.nextLong(1_000_000L))
                 .setInterestRate((int) (20 - (rate * 20) / 10D));
-        bankRepository.save(bank);
+        bankRepository.addEntity(bank);
 
         return bank;
     }
 
     @Override
-    public Bank getBank() {
-
-        return bankRepository.getEntity();
+    public Bank getByName(String name) {
+        return bankRepository.getByName(name);
     }
 
     @Override

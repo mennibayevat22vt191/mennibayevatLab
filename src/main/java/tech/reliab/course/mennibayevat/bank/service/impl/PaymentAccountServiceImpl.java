@@ -22,16 +22,16 @@ public class PaymentAccountServiceImpl implements PaymentAccountService {
                 .setUser(user)
                 .setBank(bankName)
                 .setMoneyAmount(random.nextInt(100_000));
-        paymentAccountRepository.save(account);
+        paymentAccountRepository.addEntity(account);
 
         return account;
     }
 
-    @Override
-    public PaymentAccount getPaymentAccount() {
-
-        return paymentAccountRepository.getEntity();
-    }
+//    @Override
+//    public PaymentAccount getPaymentAccount() {
+//
+//        return paymentAccountRepository.getEntity();
+//    }
 
     @Override
     public void update(PaymentAccount paymentAccount) {

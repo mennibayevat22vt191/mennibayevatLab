@@ -4,7 +4,7 @@ import tech.reliab.course.mennibayevat.bank.entity.Bank;
 
 public interface BankService {
     Bank createBank(String name);
-    Bank getBank();
+    Bank getByName(String name);
     void update(Bank bank);
     void delete(Bank bank);
 

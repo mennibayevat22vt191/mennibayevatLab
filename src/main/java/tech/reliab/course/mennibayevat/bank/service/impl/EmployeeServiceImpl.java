@@ -35,16 +35,16 @@ public class EmployeeServiceImpl implements EmployeeService {
                 .setOffice(office)
                 .setIsMakeLoan(random.nextBoolean())
                 .setSalary(random.nextInt(100_000));
-        employeeRepository.save(employee);
+        employeeRepository.addEntity(employee);
         bankService.addEmployee(bank);
 
         return employee;
     }
 
     @Override
-    public Employee getEmployee() {
+    public Employee getEmployeeById(Long id) {
 
-        return employeeRepository.getEntity();
+        return employeeRepository.getById(id);
     }
 
     @Override

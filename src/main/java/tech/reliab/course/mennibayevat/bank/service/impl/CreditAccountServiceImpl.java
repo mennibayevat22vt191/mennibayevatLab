@@ -37,17 +37,16 @@ public class CreditAccountServiceImpl implements CreditAccountService {
                 .setInterestRate(bank.getInterestRate())
                 .setCreditor(employee)
                 .setPaymentAccount(paymentAccount);
-
-        creditAccountRepository.save(account);
+        creditAccountRepository.addEntity(account);
 
         return account;
     }
 
-    @Override
-    public CreditAccount getCreditAccount() {
-
-        return creditAccountRepository.getEntity();
-    }
+//    @Override
+//    public CreditAccount getCreditAccount() {
+//
+//        return creditAccountRepository.getEntity();
+//    }
 
     @Override
     public void update(CreditAccount creditAccount) {

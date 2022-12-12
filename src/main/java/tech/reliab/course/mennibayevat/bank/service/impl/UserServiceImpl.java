@@ -2,7 +2,8 @@ package tech.reliab.course.mennibayevat.bank.service.impl;
 
 import lombok.AllArgsConstructor;
 import tech.reliab.course.mennibayevat.bank.entity.Bank;
-import tech.reliab.course.mennibayevat.bank.entity.Employee;
+import tech.reliab.course.mennibayevat.bank.entity.CreditAccount;
+import tech.reliab.course.mennibayevat.bank.entity.PaymentAccount;
 import tech.reliab.course.mennibayevat.bank.entity.User;
 import tech.reliab.course.mennibayevat.bank.repository.EmployeeRepository;
 import tech.reliab.course.mennibayevat.bank.repository.UserRepository;
@@ -12,7 +13,7 @@ import tech.reliab.course.mennibayevat.bank.service.PaymentAccountService;
 import tech.reliab.course.mennibayevat.bank.service.UserService;
 
 import java.time.Instant;
-import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Random;
 
@@ -33,6 +34,8 @@ public class UserServiceImpl implements UserService {
 
         Random random = new Random();
         var userIncome = random.nextInt(10_000);
+        final ArrayList<PaymentAccount> Paccounts = new ArrayList<>();
+        final ArrayList<CreditAccount> Caccounts = new ArrayList<>();
         var user = new User()
                 .setId(id++)
                 .setFullName(fullName)
@@ -40,32 +43,20 @@ public class UserServiceImpl implements UserService {
                 .setWorkPlace(workPlace)
                 .setMonthlyIncome(userIncome)
                 .setBanks(bank)
-                .setRate(userIncome / 10);
+                .setRate(userIncome / 10)
+                .setPaymentAccounts(Paccounts)
+                .setCreditAccounts(Caccounts);
 
-
-
-
-        var paymentAccount = paymentAccountService.create(user, bank.getName());
-
-        var employee = employeeRepository.getEntity();
-        var creditAccount = creditAccountService
-                .create(user, bank.getName(),
-                        LocalDate.now(), LocalDate.now(),
-                        100_000L, 1000L,
-                        employee, paymentAccount);
-        user.setPaymentAccounts(paymentAccount);
-        user.setCreditAccounts(creditAccount);
-
-        userRepository.save(user);
+        userRepository.addEntity(user);
         bankService.addClient(bank);
 
         return user;
     }
 
     @Override
-    public User getUser() {
+    public User getUserById(Long id) {
 
-        return userRepository.getEntity();
+        return userRepository.getById(id);
     }
 
     @Override

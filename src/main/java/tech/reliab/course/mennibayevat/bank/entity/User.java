@@ -1,5 +1,6 @@
 package tech.reliab.course.mennibayevat.bank.entity;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 import lombok.*;
@@ -16,9 +17,7 @@ public class User {
     private String workPlace;
     private Integer monthlyIncome;
     private Bank banks;
-    @ToString.Exclude
     private CreditAccount creditAccounts;
-    @ToString.Exclude
     private PaymentAccount paymentAccounts;
     private Integer rate;
 }
