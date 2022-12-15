@@ -3,7 +3,9 @@ package tech.reliab.course.mennibayevat.bank.service.impl;
 import lombok.AllArgsConstructor;
 import tech.reliab.course.mennibayevat.bank.entity.Bank;
 import tech.reliab.course.mennibayevat.bank.entity.BankOffice;
+import tech.reliab.course.mennibayevat.bank.entity.Employee;
 import tech.reliab.course.mennibayevat.bank.repository.BankOfficeRepository;
+import tech.reliab.course.mennibayevat.bank.repository.EmployeeRepository;
 import tech.reliab.course.mennibayevat.bank.service.BankOfficeService;
 import tech.reliab.course.mennibayevat.bank.service.BankService;
 import tech.reliab.course.mennibayevat.bank.utils.enums.BankOfficeStatus;
@@ -12,9 +14,10 @@ import java.util.Random;
 
 @AllArgsConstructor
 public class BankOfficeServiceImpl implements BankOfficeService {
-    private BankOfficeRepository bankOfficeRepository;
-    private BankService bankService;
     private static Long id = 0L;
+    private BankOfficeRepository bankOfficeRepository;
+    private EmployeeRepository employeeRepository;
+    private BankService bankService;
 
     /**
      * Создает офис, увеличивает количество офисов в банке
@@ -46,6 +49,13 @@ public class BankOfficeServiceImpl implements BankOfficeService {
     public BankOffice getBankOfficeByName(String name) {
 
         return bankOfficeRepository.getByName(name);
+    }
+
+    @Override
+    public Employee getRandomEmployer(BankOffice office) {
+
+        Random random = new Random();
+        return employeeRepository.getEntities().get(random.nextInt(5));
     }
 
     @Override

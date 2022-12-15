@@ -10,14 +10,13 @@ import tech.reliab.course.mennibayevat.bank.service.BankAtmService;
 import tech.reliab.course.mennibayevat.bank.service.BankService;
 import tech.reliab.course.mennibayevat.bank.utils.enums.BankAtmStatus;
 
-import java.util.ArrayList;
 import java.util.Random;
 
 @AllArgsConstructor
 public class BankAtmServiceImpl implements BankAtmService {
+    private static Long id = 0L;
     private BankAtmRepository bankAtmRepository;
     private BankService bankService;
-    private static Long id = 0L;
 
     @Override
     public BankAtm create(String name, Bank bank, BankOffice office, Employee employee) {

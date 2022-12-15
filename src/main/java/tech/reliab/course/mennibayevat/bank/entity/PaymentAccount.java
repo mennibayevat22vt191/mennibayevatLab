@@ -1,14 +1,16 @@
 package tech.reliab.course.mennibayevat.bank.entity;
 
-import lombok.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 import lombok.experimental.Accessors;
 
 @Data
 @Accessors(chain = true)
 @NoArgsConstructor
-@ToString
 public class PaymentAccount {
     private Long id;
+    @ToString.Exclude
     private User user;
     private String bank;
     private Integer moneyAmount;

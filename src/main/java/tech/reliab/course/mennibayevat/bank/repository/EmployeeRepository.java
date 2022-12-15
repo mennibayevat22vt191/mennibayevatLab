@@ -1,7 +1,6 @@
 package tech.reliab.course.mennibayevat.bank.repository;
 
 import lombok.Getter;
-import tech.reliab.course.mennibayevat.bank.entity.BankOffice;
 import tech.reliab.course.mennibayevat.bank.entity.Employee;
 
 import java.util.ArrayList;
@@ -32,7 +31,7 @@ public class EmployeeRepository implements Repository<Employee> {
 
     public Employee getById(Long id) {
         for (Employee employee : this.entities) {
-            if(employee.getId().equals(id))
+            if (employee.getId().equals(id))
                 return employee;
         }
         return null;

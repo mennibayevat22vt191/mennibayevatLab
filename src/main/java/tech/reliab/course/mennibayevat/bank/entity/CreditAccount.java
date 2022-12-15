@@ -1,16 +1,18 @@
 package tech.reliab.course.mennibayevat.bank.entity;
 
-import java.time.LocalDate;
-
-import lombok.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 import lombok.experimental.Accessors;
+
+import java.time.LocalDate;
 
 @Data
 @Accessors(chain = true)
 @NoArgsConstructor
-@ToString
 public class CreditAccount {
     private Long id;
+    @ToString.Exclude
     private User user;
     private String bankName;
     private LocalDate creditStart;

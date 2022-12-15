@@ -1,8 +1,6 @@
 package tech.reliab.course.mennibayevat.bank.repository;
 
 import lombok.Getter;
-import tech.reliab.course.mennibayevat.bank.entity.BankAtm;
-import tech.reliab.course.mennibayevat.bank.entity.CreditAccount;
 import tech.reliab.course.mennibayevat.bank.entity.User;
 
 import java.util.ArrayList;
@@ -35,7 +33,7 @@ public class UserRepository implements Repository<User> {
 
     public User getById(Long id) {
         for (User user : this.entities) {
-            if(user.getId().equals(id))
+            if (user.getId().equals(id))
                 return user;
         }
         return null;

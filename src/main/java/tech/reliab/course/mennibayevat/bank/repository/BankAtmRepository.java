@@ -1,10 +1,7 @@
 package tech.reliab.course.mennibayevat.bank.repository;
 
 import lombok.Getter;
-import tech.reliab.course.mennibayevat.bank.entity.Bank;
 import tech.reliab.course.mennibayevat.bank.entity.BankAtm;
-import tech.reliab.course.mennibayevat.bank.entity.BankOffice;
-import tech.reliab.course.mennibayevat.bank.entity.Employee;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -39,7 +36,7 @@ public class BankAtmRepository implements Repository<BankAtm> {
 
     public BankAtm getById(Long id) {
         for (BankAtm atm : this.atms) {
-            if(atm.getId().equals(id))
+            if (atm.getId().equals(id))
                 return atm;
         }
         return null;

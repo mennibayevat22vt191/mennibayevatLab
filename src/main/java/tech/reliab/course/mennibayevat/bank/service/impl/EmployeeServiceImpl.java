@@ -14,10 +14,9 @@ import java.util.Random;
 
 @AllArgsConstructor
 public class EmployeeServiceImpl implements EmployeeService {
+    private static Long id = 0L;
     private EmployeeRepository employeeRepository;
     private BankService bankService;
-
-    private static Long id = 0L;
 
     /**
      * Создает сотрудника банка, увеличивает число сотрудников в банке
@@ -45,6 +44,15 @@ public class EmployeeServiceImpl implements EmployeeService {
     public Employee getEmployeeById(Long id) {
 
         return employeeRepository.getById(id);
+    }
+
+    @Override
+    public Employee getRandomEmployeeByBank(Bank bank) {
+        return employeeRepository.getEntities()
+                .stream()
+                .filter(el -> el.getBank() == bank)
+                .findAny()
+                .orElseThrow();
     }
 
     @Override

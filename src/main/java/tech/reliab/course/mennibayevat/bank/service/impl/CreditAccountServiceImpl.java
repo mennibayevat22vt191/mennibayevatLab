@@ -14,10 +14,9 @@ import java.time.Period;
 
 @AllArgsConstructor
 public class CreditAccountServiceImpl implements CreditAccountService {
+    private static Long id = 0L;
     private CreditAccountRepository creditAccountRepository;
     private BankRepository bankRepository;
-
-    private static Long id = 0L;
 
     @Override
     public CreditAccount create(User user, String bankName,
@@ -38,6 +37,7 @@ public class CreditAccountServiceImpl implements CreditAccountService {
                 .setCreditor(employee)
                 .setPaymentAccount(paymentAccount);
         creditAccountRepository.addEntity(account);
+        user.getCreditAccounts().add(account);
 
         return account;
     }

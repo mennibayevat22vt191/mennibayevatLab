@@ -1,6 +1,8 @@
 package tech.reliab.course.mennibayevat.bank.entity;
 
-import lombok.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 import lombok.experimental.Accessors;
 import tech.reliab.course.mennibayevat.bank.utils.enums.BankAtmStatus;
 

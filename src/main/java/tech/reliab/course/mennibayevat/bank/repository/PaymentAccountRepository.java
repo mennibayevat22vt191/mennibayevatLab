@@ -1,7 +1,6 @@
 package tech.reliab.course.mennibayevat.bank.repository;
 
 import lombok.Getter;
-import tech.reliab.course.mennibayevat.bank.entity.CreditAccount;
 import tech.reliab.course.mennibayevat.bank.entity.PaymentAccount;
 
 import java.util.ArrayList;

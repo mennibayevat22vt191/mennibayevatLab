@@ -1,7 +1,6 @@
 package tech.reliab.course.mennibayevat.bank.repository;
 
 import lombok.Getter;
-import tech.reliab.course.mennibayevat.bank.entity.Bank;
 import tech.reliab.course.mennibayevat.bank.entity.BankOffice;
 
 import java.util.ArrayList;
@@ -34,7 +33,7 @@ public class BankOfficeRepository implements Repository<BankOffice> {
 
     public BankOffice getByName(String name) {
         for (BankOffice bankOffice : this.entities) {
-            if(bankOffice.getName().equals(name))
+            if (bankOffice.getName().equals(name))
                 return bankOffice;
         }
         return null;

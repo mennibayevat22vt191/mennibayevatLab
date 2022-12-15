@@ -4,6 +4,6 @@ public enum BankOfficeStatus {
     WORKING, NOT_WORKING;
 
     public static BankOfficeStatus getRandomStatus() {
-        return values()[(int)Math.floor(Math.random() * values().length)];
+        return values()[(int) Math.floor(Math.random() * values().length)];
     }
 }

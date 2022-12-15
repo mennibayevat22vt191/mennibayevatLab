@@ -1,9 +1,11 @@
 package tech.reliab.course.mennibayevat.bank.entity;
 
-import java.util.Date;
-
-import lombok.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 import lombok.experimental.Accessors;
+
+import java.util.Date;
 
 @Data
 @Accessors(chain = true)

@@ -35,7 +35,7 @@ public class BankRepository implements Repository<Bank> {
 
     public Bank getByName(String name) {
         for (Bank bank : this.banks) {
-            if(bank.getName().equals(name))
+            if (bank.getName().equals(name))
                 return bank;
         }
         return null;
