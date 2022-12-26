@@ -1,8 +1,10 @@
 package tech.reliab.course.mennibayevat.bank.service;
 
 import tech.reliab.course.mennibayevat.bank.entity.Bank;
+import tech.reliab.course.mennibayevat.bank.entity.BankAtm;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public interface BankService {
     Bank create(String name);
@@ -16,6 +18,10 @@ public interface BankService {
     void delete(Bank bank);
 
     String bankInfo(String name);
+
+    Bank getBestBank();
+
+    List<BankAtm> getAtmsToExtraditeCredit(Bank bank, Long creditAmount);
 
     void addAtm(Bank bank);
 

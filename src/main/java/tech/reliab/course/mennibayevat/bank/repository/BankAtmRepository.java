@@ -2,9 +2,13 @@ package tech.reliab.course.mennibayevat.bank.repository;
 
 import lombok.Getter;
 import tech.reliab.course.mennibayevat.bank.entity.BankAtm;
+import tech.reliab.course.mennibayevat.bank.entity.BankOffice;
+import tech.reliab.course.mennibayevat.bank.utils.enums.BankAtmStatus;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Getter
 public class BankAtmRepository implements Repository<BankAtm> {
@@ -40,5 +44,15 @@ public class BankAtmRepository implements Repository<BankAtm> {
                 return atm;
         }
         return null;
+    }
+
+    public List<BankAtm> getAllByOfficeLocationAndWorksAndMoneyContains(BankOffice bankOffice, Long moneyAmount) {
+        return atms.stream()
+                .filter(bankAtm -> bankAtm.getLocation().equals(bankOffice.getAddress()) &&
+                        bankAtm.getStatus().equals(BankAtmStatus.WORKING) &&
+                        bankAtm.getMoneyStock() > moneyAmount &&
+                        bankAtm.getBankOwner().equals(bankOffice.getBank())
+                )
+                .collect(Collectors.toList());
     }
 }

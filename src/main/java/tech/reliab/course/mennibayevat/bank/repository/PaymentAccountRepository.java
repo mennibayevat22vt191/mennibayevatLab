@@ -1,7 +1,9 @@
 package tech.reliab.course.mennibayevat.bank.repository;
 
 import lombok.Getter;
+import tech.reliab.course.mennibayevat.bank.entity.Bank;
 import tech.reliab.course.mennibayevat.bank.entity.PaymentAccount;
+import tech.reliab.course.mennibayevat.bank.entity.User;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -29,5 +31,14 @@ public class PaymentAccountRepository implements Repository<PaymentAccount> {
                 this.entities.set(Math.toIntExact(account.getId()), entity);
                 break;
             }
+    }
+
+    public PaymentAccount getPaymentAccountByBankAndUser(Bank bank, User user) {
+        return entities.stream()
+                .filter(paymentAccount ->
+                        paymentAccount.getUser().equals(user) &&
+                                paymentAccount.getBank().equals(bank.getName()))
+                .findFirst()
+                .orElse(null);
     }
 }

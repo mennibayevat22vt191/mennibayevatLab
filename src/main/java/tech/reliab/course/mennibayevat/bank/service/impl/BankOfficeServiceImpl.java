@@ -10,7 +10,9 @@ import tech.reliab.course.mennibayevat.bank.service.BankOfficeService;
 import tech.reliab.course.mennibayevat.bank.service.BankService;
 import tech.reliab.course.mennibayevat.bank.utils.enums.BankOfficeStatus;
 
+import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 @AllArgsConstructor
 public class BankOfficeServiceImpl implements BankOfficeService {
@@ -56,6 +58,14 @@ public class BankOfficeServiceImpl implements BankOfficeService {
 
         Random random = new Random();
         return employeeRepository.getEntities().get(random.nextInt(5));
+    }
+
+    @Override
+    public List<BankOffice> getAllWorksOffices(Bank bank) {
+        var offices = bankOfficeRepository.findAllByBank(bank);
+        return offices.stream().filter(bankOffice ->
+                        bankOffice.getStatus().equals(BankOfficeStatus.WORKING) && bankOffice.getCreditAvailable())
+                .collect(Collectors.toList());
     }
 
     @Override
