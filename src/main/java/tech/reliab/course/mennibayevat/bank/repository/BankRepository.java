@@ -40,4 +40,11 @@ public class BankRepository implements Repository<Bank> {
         }
         return null;
     }
+    public Bank getById(Long id) {
+        for (Bank bank : this.banks) {
+            if (bank.getId().equals(id))
+                return bank;
+        }
+        return null;
+    }
 }

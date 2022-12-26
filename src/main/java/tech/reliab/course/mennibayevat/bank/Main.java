@@ -1,15 +1,15 @@
 package tech.reliab.course.mennibayevat.bank;
 
-import tech.reliab.course.mennibayevat.bank.entity.BankOffice;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import tech.reliab.course.mennibayevat.bank.entity.Bank;
 import tech.reliab.course.mennibayevat.bank.entity.User;
-import tech.reliab.course.mennibayevat.bank.exception.BankException;
-import tech.reliab.course.mennibayevat.bank.exception.BankOfficeException;
-import tech.reliab.course.mennibayevat.bank.exception.CreditAmountException;
-import tech.reliab.course.mennibayevat.bank.exception.EmployeeException;
 import tech.reliab.course.mennibayevat.bank.repository.*;
 import tech.reliab.course.mennibayevat.bank.service.*;
 import tech.reliab.course.mennibayevat.bank.service.impl.*;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Random;
 import java.util.Scanner;
@@ -26,15 +26,23 @@ public class Main {
     static PaymentAccountRepository paymentAccountRepository = new PaymentAccountRepository();
     static UserRepository userRepository = new UserRepository();
 
-    static BankService bankService = new BankServiceImpl(bankRepository, bankOfficeRepository, bankAtmRepository);
+    static BankService bankService = new BankServiceImpl(bankRepository, bankOfficeRepository, bankAtmRepository,
+            employeeRepository, creditAccountRepository, paymentAccountRepository);
     static BankAtmService bankAtmService = new BankAtmServiceImpl(bankAtmRepository, bankService);
-    static BankOfficeService bankOfficeService = new BankOfficeServiceImpl(bankOfficeRepository, employeeRepository, bankService);
+    static BankOfficeService bankOfficeService = new BankOfficeServiceImpl(bankOfficeRepository, employeeRepository,
+            bankService);
     static EmployeeService employeeService = new EmployeeServiceImpl(employeeRepository, bankService);
-    static PaymentAccountService paymentAccountService = new PaymentAccountServiceImpl(paymentAccountRepository, bankService);
+    static PaymentAccountService paymentAccountService = new PaymentAccountServiceImpl(paymentAccountRepository,
+            bankService);
     static UserService userService = new UserServiceImpl(userRepository, bankService);
-    static CreditAccountService creditAccountService = new CreditAccountServiceImpl(creditAccountRepository, bankRepository);
+    static CreditAccountService creditAccountService = new CreditAccountServiceImpl(creditAccountRepository,
+            bankRepository);
 
-    public static void main(String[] args) {
+    public static ObjectMapper objectMapper = new ObjectMapper();
+
+    static {objectMapper.registerModule(new JavaTimeModule());}
+
+    public static void main(String[] args) throws IOException {
 
         var officeNumber = 1;
         var atmNumber = 1;
@@ -44,127 +52,119 @@ public class Main {
 
             for (long k = 0L; k < 9; k++) {
 
-                var office = bankOfficeService.create("Офис " + officeNumber, "Адрес 1, улица 1, дом 1", bankService.getByName("Банк " + i));
+                var office = bankOfficeService.create("Офис " + officeNumber, "Адрес 1, улица 1, дом 1",
+                        bankService.getByName("Банк " + i));
 
                 for (long j = 0L; j < 5; j++) {
-                    employeeService.create("Рабов Работник Работович", "Старший юрист", bankService.getByName("Банк " + i), bankOfficeService.getBankOfficeByName("Офис " + officeNumber));
+                    employeeService.create("Рабов Работник Работович", "Старший юрист",
+                            bankService.getByName("Банк " + i),
+                            bankOfficeService.getBankOfficeByName("Офис " + officeNumber));
 
-                    var user = userService.create("К.К. Клиентов", "Дикси", bankService.getByName("Банк " + i));
+                    var user = userService.create("К.К. Клиентов", "Дикси",
+                            bankService.getByName("Банк " + i));
+
                     paymentAccountService.create(user, "Банк " + i);
-                    userService.create("К.К. Клиентов", "Дикси", bankService.getByName("Банк " + i));
+                    paymentAccountService.create(user, "Банк " + i);
+
+                    creditAccountService.create(user, "Банк " + i,
+                            LocalDate.now(), LocalDate.now(),
+                            100_000L, 1000L,
+                            employeeService.getRandomEmployeeByBank(bankService.getByName("Банк " + i)),
+                            userService.getRandomPaymentAccount(user));
+                    creditAccountService.create(user, "Банк " + i,
+                            LocalDate.now(), LocalDate.now(),
+                            100_000L, 1000L,
+                            employeeService.getRandomEmployeeByBank(bankService.getByName("Банк " + i)),
+                            userService.getRandomPaymentAccount(user));
                 }
 
-                bankAtmService.create("Банкомат " + atmNumber, bankService.getByName("Банк " + i), bankOfficeService.getBankOfficeByName("Офис " + officeNumber), bankOfficeService.getRandomEmployer(office));
+                bankAtmService.create("Банкомат " + atmNumber, bankService.getByName("Банк " + i),
+                        bankOfficeService.getBankOfficeByName("Офис " + officeNumber),
+                        bankOfficeService.getRandomEmployer(office));
 
                 atmNumber++;
                 officeNumber++;
             }
         }
 
-        try {
-            System.out.print("Введите ваш id: ");
-            var userId = scanner.nextLong();
-            var user = userRepository.getById(userId);
-            if (user == null) {
-                System.out.println("Пользователя с таким id не существует");
-            } else {
-                System.out.print("Введите сумму кредита: ");
-                var creditAmount = scanner.nextLong();
-                getCredit(user, creditAmount);
-            }
-        } catch (Exception e) {
-            System.out.println("Что-то пошло не так! Причина: " + e.getMessage());
+        var user = userService.getUserById(0L);
+        paymentAccountService.create(user, "Банк " + 2);
+        paymentAccountService.create(user, "Банк " + 2);
+        paymentAccountService.create(user, "Банк " + 3);
+        paymentAccountService.create(user, "Банк " + 3);
+        creditAccountService.create(user, "Банк " + 2,
+                LocalDate.now(), LocalDate.now().plusMonths(5),
+                100_000L, 1000L,
+                employeeService.getRandomEmployeeByBank(bankService.getByName("Банк " + 2)),
+                userService.getRandomPaymentAccount(user, "Банк " + 2));
+        creditAccountService.create(user, "Банк " + 2,
+                LocalDate.now(), LocalDate.now().plusMonths(2),
+                100_000L, 1000L,
+                employeeService.getRandomEmployeeByBank(bankService.getByName("Банк " + 2)),
+                userService.getRandomPaymentAccount(user, "Банк " + 2));
+        creditAccountService.create(user, "Банк " + 3,
+                LocalDate.now(), LocalDate.now().plusMonths(8),
+                100_000L, 1000L,
+                employeeService.getRandomEmployeeByBank(bankService.getByName("Банк " + 3)),
+                userService.getRandomPaymentAccount(user, "Банк " + 3));
+        creditAccountService.create(user, "Банк " + 3,
+                LocalDate.now(), LocalDate.now().plusMonths(15),
+                100_000L, 1000L,
+                employeeService.getRandomEmployeeByBank(bankService.getByName("Банк " + 3)),
+                userService.getRandomPaymentAccount(user, "Банк " + 3));
+        creditAccountService.create(user, "Банк " + 3,
+                LocalDate.now(), LocalDate.now().plusMonths(7),
+                100_000L, 1000L,
+                employeeService.getRandomEmployeeByBank(bankService.getByName("Банк " + 3)),
+                userService.getRandomPaymentAccount(user, "Банк " + 3));
+        transferAccounts(user);
+    }
+
+    private static void transferAccounts(User user) throws IOException {
+        System.out.println(user + "Платёжные аккаунты: \n" + user.paymentAccountsInfo() + "Кредитный аккаунты: \n" + user.creditAccountsInfo() + '\n');
+        System.out.print("Введите id банка из которого вы хотите перевести счета: ");
+        var pastBankId = scanner.nextLong();
+        var pastBank = bankRepository.getById(pastBankId);
+        System.out.print("Введите id банка в который вы хотите перевести счета: ");
+        var newBankId = scanner.nextLong();
+        var newBank = bankRepository.getById(newBankId);
+
+        if (transferAccountsToAnotherBank(user, pastBank, newBank)) {
+            System.out.println(user + "Платёжные аккаунты: \n" + user.paymentAccountsInfo() + "Кредитный аккаунты: \n" + user.creditAccountsInfo() + '\n');
+        } else {
+            System.out.println("Что-то пошло не так");
         }
     }
 
-    private static void getCredit(User user, Long creditAmount) throws Exception {
-        if (creditAmount < 10000) {
-            throw new CreditAmountException("Сумма кредита < 10000р");
-        } else if (creditAmount > 1_000_000_00) {
-            throw new CreditAmountException("Сумма кредита > 100 000 000р");
-        } else {
-            var bank = bankService.getBestBank();
-            System.out.println("Лучший банк для вас: " + bank.getName());
+    private static boolean transferAccountsToAnotherBank(User user, Bank oldBank, Bank newBank) throws IOException {
+        var usersPaymentsAccounts = user.getPaymentAccounts().stream()
+                .filter(paymentAccount -> paymentAccount.getBank().equals(oldBank.getName()))
+                .toList();
+        var usersCreditAccounts = user.getCreditAccounts().stream()
+                .filter(creditAccount -> creditAccount.getBankName().equals(oldBank.getName()))
+                .toList();
 
-            var offices = bankOfficeService.getAllWorksOffices(bank);
-            if (offices == null || offices.isEmpty()) {
-                throw new BankException("В банке нет работающих офисов, выдающих кредит");
-            }
+        var paymentAccountsJsonFileName = "paymentAccount.json";
+        var creditAccountsJsonFileName = "creditAccount.json";
 
-            if (offices.stream().filter(office -> office.getMoneyStock() > creditAmount).findFirst().isEmpty()) {
-                throw new CreditAmountException("Ни в одном офисе банка нет нужной суммы");
-            }
+        FileWriter paymentAccountsJsonFile = new FileWriter(paymentAccountsJsonFileName);
+        paymentAccountsJsonFile.write(objectMapper.writeValueAsString(usersPaymentsAccounts));
+        paymentAccountsJsonFile.close();
 
-            System.out.println("В этих офисах можно взять кредит: ");
-            var availableOffices = offices.stream().filter(office -> office.getMoneyStock() > creditAmount).toList();
+        FileWriter creditAccountsJsonFile = new FileWriter(creditAccountsJsonFileName);
+        creditAccountsJsonFile.write(objectMapper.writeValueAsString(usersCreditAccounts));
+        creditAccountsJsonFile.close();
 
-            availableOffices.forEach(office -> {
-                System.out.printf("Название '%s'; Адрес '%s'; id '%d'%n", office.getName(), office.getAddress(), office.getId());
-            });
-            System.out.print("Выберите id оффиса: ");
+        try {
+            creditAccountRepository.delete(usersCreditAccounts);
+            paymentAccountRepository.delete(usersPaymentsAccounts);
 
-            BankOffice office;
-            do {
-                var officeId = scanner.nextLong();
-                office = offices.stream().filter(el -> el.getId().equals(officeId)).findFirst().orElse(null);
-
-                if (office == null) {
-                    System.out.println("Неверный id");
-                }
-            } while (office == null);
-
-            var employees = employeeRepository.findAllCreditAvailableByOffice(office);
-            if (employees.isEmpty()) {
-                throw new EmployeeException("Нет сотрудников, которые могут выдать кредит");
-            }
-
-            var employee = employees.get(random.nextInt(employees.size()));
-            System.out.println("C вами будет работать " + employee.getFullName());
-
-            var paymentAccount = paymentAccountRepository.getPaymentAccountByBankAndUser(bank, user);
-            if (paymentAccount != null) {
-                System.out.println("Вы уже наш клиент");
-            } else {
-                System.out.println("Вы ещё не наш клиент. Создаём аккаунт");
-                paymentAccount = paymentAccountService.create(user, bank.getName());
-            }
-
-            System.out.println("Ваш кредитный рейтинг = " + user.getRate());
-            System.out.println("Рейтинг банка = " + bank.getRate());
-
-            if (user.getRate() < 500 && bank.getRate() > 50) {
-                throw new BankException("Вам отказано в выдаче кредита");
-            }
-            System.out.println("Вам одобрен кредит. Создаем кредитный аккаунт.");
-
-            long loanLength;
-            do {
-                System.out.print("На какой срок вы планируете взять кредит(от 12 до 24 месяцев): ");
-                loanLength = scanner.nextLong();
-            } while (loanLength > 24 || loanLength < 12);
-
-            var creditBegin = LocalDate.now();
-            var creditEnd = LocalDate.now().plusMonths(loanLength);
-            var monthlyPayment = (creditAmount * (1 + bank.getInterestRate() / 100)) / loanLength;
-
-            creditAccountService.create(user, bank.getName(),
-                    creditBegin, creditEnd,
-                    creditAmount,
-                    monthlyPayment,
-                    employee, paymentAccount);
-
-            System.out.println("Кредит успешно оформлен");
-
-            var atms = bankAtmRepository.getAllByOfficeLocationAndWorksAndMoneyContains(office, creditAmount);
-
-            if (!atms.isEmpty()) {
-                System.out.println("В нашем банкомате недостаточно средств");
-                atms = bankService.getAtmsToExtraditeCredit(bank, creditAmount);
-                System.out.println("Адреса банкоматов, с достаточным количеством средств: ");
-                atms.forEach(bankAtm -> System.out.println(bankAtm.getLocation()));
-            } else {
-                throw new BankOfficeException("Нет банков с достаточным количеством средств");
-            }
+            bankService.migrateUsersPaymentAccountsFromFile(user, newBank, paymentAccountsJsonFileName);
+            bankService.migrateUsersCreditAccountsFromFile(user, newBank, creditAccountsJsonFileName);
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+            return false;
         }
+        return true;
     }
 }

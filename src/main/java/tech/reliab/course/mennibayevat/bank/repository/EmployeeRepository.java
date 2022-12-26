@@ -1,6 +1,7 @@
 package tech.reliab.course.mennibayevat.bank.repository;
 
 import lombok.Getter;
+import tech.reliab.course.mennibayevat.bank.entity.Bank;
 import tech.reliab.course.mennibayevat.bank.entity.BankOffice;
 import tech.reliab.course.mennibayevat.bank.entity.Employee;
 
@@ -43,6 +44,12 @@ public class EmployeeRepository implements Repository<Employee> {
     public List<Employee> findAllCreditAvailableByOffice(BankOffice office) {
         return entities.stream().filter(employee ->
                         employee.getOffice().equals(office) &&
+                                employee.getIsMakeLoan())
+                .collect(Collectors.toList());
+    }
+    public List<Employee> findAllCreditAvailableByBank(Bank bank) {
+        return entities.stream().filter(employee ->
+                        employee.getBank().equals(bank) &&
                                 employee.getIsMakeLoan())
                 .collect(Collectors.toList());
     }

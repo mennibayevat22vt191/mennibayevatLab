@@ -11,6 +11,8 @@ public interface UserService {
 
     PaymentAccount getRandomPaymentAccount(User user);
 
+    PaymentAccount getRandomPaymentAccount(User user, String bankName);
+
     void update(User user);
 
     void delete(User user);

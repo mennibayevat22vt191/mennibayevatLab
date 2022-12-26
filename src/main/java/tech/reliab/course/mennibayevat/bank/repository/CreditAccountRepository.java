@@ -2,6 +2,7 @@ package tech.reliab.course.mennibayevat.bank.repository;
 
 import lombok.Getter;
 import tech.reliab.course.mennibayevat.bank.entity.CreditAccount;
+import tech.reliab.course.mennibayevat.bank.entity.PaymentAccount;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,5 +31,13 @@ public class CreditAccountRepository implements Repository<CreditAccount> {
                 this.entities.set(Math.toIntExact(account.getId()), entity);
                 break;
             }
+    }
+
+    public void save(List<CreditAccount> accounts) {
+        this.entities.addAll(accounts);
+    }
+
+    public void delete(List<CreditAccount> accounts) {
+        entities.removeAll(accounts);
     }
 }

@@ -62,6 +62,14 @@ public class UserServiceImpl implements UserService {
                 .findFirst()
                 .orElseThrow();
     }
+    @Override
+    public PaymentAccount getRandomPaymentAccount(User user, String bankName) {
+        //var random = new Random();
+        return user.getPaymentAccounts()
+                .stream().filter(paymentAccount -> paymentAccount.getBank().equals(bankName))
+                .findFirst()
+                .orElseThrow();
+    }
 
     @Override
     public void update(User user) {

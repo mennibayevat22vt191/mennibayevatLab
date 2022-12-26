@@ -1,16 +1,18 @@
 package tech.reliab.course.mennibayevat.bank.service.impl;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import lombok.AllArgsConstructor;
-import tech.reliab.course.mennibayevat.bank.entity.Bank;
-import tech.reliab.course.mennibayevat.bank.entity.BankAtm;
-import tech.reliab.course.mennibayevat.bank.repository.BankAtmRepository;
-import tech.reliab.course.mennibayevat.bank.repository.BankOfficeRepository;
-import tech.reliab.course.mennibayevat.bank.repository.BankRepository;
+import tech.reliab.course.mennibayevat.bank.entity.*;
+import tech.reliab.course.mennibayevat.bank.repository.*;
 import tech.reliab.course.mennibayevat.bank.service.BankService;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+
+import static tech.reliab.course.mennibayevat.bank.Main.*;
 
 @AllArgsConstructor
 public class BankServiceImpl implements BankService {
@@ -18,6 +20,9 @@ public class BankServiceImpl implements BankService {
     private final BankRepository bankRepository;
     private final BankOfficeRepository bankOfficeRepository;
     private final BankAtmRepository bankAtmRepository;
+    private final EmployeeRepository employeeRepository;
+    private final CreditAccountRepository creditAccountRepository;
+    private final PaymentAccountRepository paymentAccountRepository;
 
     @Override
     public Bank create(String name) {
@@ -62,7 +67,10 @@ public class BankServiceImpl implements BankService {
     @Override
     public String bankInfo(String name) {
         var bank = getByName(name);
-        return "\nБанк" + name + ":\n" + "id=" + bank.getId() + "\nколичество банков=" + bank.getOfficeCount() + "\nколичество банкоматов=" + bank.getAtmCount() + "\nколичество работников=" + bank.getEmployeeCount() + "\nколичество клиентов=" + bank.getClientCount() + "\nрейтинг=" + bank.getRate() + "\nсредства=" + bank.getMoneyStock() + "\nПроцентная ставка=" + bank.getInterestRate() + "%\n\n";
+        return "\nБанк" + name + ":\n" + "id=" + bank.getId() + "\nколичество банков=" + bank.getOfficeCount() +
+                "\nколичество банкоматов=" + bank.getAtmCount() + "\nколичество работников=" + bank.getEmployeeCount() +
+                "\nколичество клиентов=" + bank.getClientCount() + "\nрейтинг=" + bank.getRate() + "\nсредства=" +
+                bank.getMoneyStock() + "\nПроцентная ставка=" + bank.getInterestRate() + "%\n\n";
     }
 
     @Override
@@ -94,6 +102,38 @@ public class BankServiceImpl implements BankService {
                 .findFirst()
                 .orElse(null);
 
+    }
+
+    @Override
+    public boolean migrateUsersCreditAccountsFromFile(User user, Bank bank, String filename) throws IOException {
+        File file = new File(filename);
+        List<CreditAccount> creditAccounts = objectMapper.readValue(file, new TypeReference<>(){});
+        creditAccounts.forEach(creditAccount -> {
+            creditAccount.setBankName(bank.getName());
+            //creditAccount.setId(id++);
+            creditAccount.setUser(user);
+            creditAccount.getPaymentAccount().setBank(bank.getName());
+            var newEmployeeList = employeeRepository.findAllCreditAvailableByBank(bank);
+            creditAccount.setCreditor(newEmployeeList.get(0));
+        });
+        creditAccountRepository.save(creditAccounts);
+        user.setCreditAccounts(creditAccounts);
+        return true;
+    }
+
+    @Override
+    public boolean migrateUsersPaymentAccountsFromFile(User user, Bank bank, String filename) throws IOException {
+        File file = new File(filename);
+        List<PaymentAccount> paymentAccounts = objectMapper.readValue(file, new TypeReference<>(){});
+
+        paymentAccounts.forEach(paymentAccount -> {
+            paymentAccount.setUser(user);
+            //paymentAccount.setId(id++);
+            paymentAccount.setBank(bank.getName());
+        });
+        paymentAccountRepository.save(paymentAccounts);
+        user.setPaymentAccounts(paymentAccounts);
+        return false;
     }
 
     /**
