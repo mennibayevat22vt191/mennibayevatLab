@@ -47,7 +47,8 @@ public class PaymentAccountRepository implements Repository<PaymentAccount> {
                 .orElse(null);
     }
 
-    public void delete(List<PaymentAccount> accounts) {
+    public void delete(List<PaymentAccount> accounts, User user) {
         entities.removeAll(accounts);
+        user.getPaymentAccounts().removeAll(accounts);
     }
 }

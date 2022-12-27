@@ -158,8 +158,8 @@ public class Main {
         creditAccountsJsonFile.close();
 
         try {
-            creditAccountRepository.delete(usersCreditAccounts);
-            paymentAccountRepository.delete(usersPaymentsAccounts);
+            creditAccountRepository.delete(usersCreditAccounts, user);
+            paymentAccountRepository.delete(usersPaymentsAccounts, user);
 
             bankService.migrateUsersPaymentAccountsFromFile(user, newBank, paymentAccountsJsonFileName);
             bankService.migrateUsersCreditAccountsFromFile(user, newBank, creditAccountsJsonFileName);

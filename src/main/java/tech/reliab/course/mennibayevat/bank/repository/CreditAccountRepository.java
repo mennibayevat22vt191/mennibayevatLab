@@ -3,6 +3,7 @@ package tech.reliab.course.mennibayevat.bank.repository;
 import lombok.Getter;
 import tech.reliab.course.mennibayevat.bank.entity.CreditAccount;
 import tech.reliab.course.mennibayevat.bank.entity.PaymentAccount;
+import tech.reliab.course.mennibayevat.bank.entity.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +38,8 @@ public class CreditAccountRepository implements Repository<CreditAccount> {
         this.entities.addAll(accounts);
     }
 
-    public void delete(List<CreditAccount> accounts) {
+    public void delete(List<CreditAccount> accounts, User user) {
         entities.removeAll(accounts);
+        user.getCreditAccounts().removeAll(accounts);
     }
 }

@@ -1,6 +1,7 @@
 package tech.reliab.course.mennibayevat.bank.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -19,6 +20,7 @@ public class BankOffice {
     private String address;
     private BankOfficeStatus status;
     private Boolean accommodateAtmAvailable;
+    @JsonIgnore
     private List<BankAtm> atms;
     private Boolean creditAvailable;
     private Boolean isWithdraw;

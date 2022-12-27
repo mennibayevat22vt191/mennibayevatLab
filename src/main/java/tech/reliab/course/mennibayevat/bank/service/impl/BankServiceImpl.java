@@ -115,14 +115,12 @@ public class BankServiceImpl implements BankService {
         List<CreditAccount> creditAccounts = objectMapper.readValue(file, new TypeReference<>(){});
         creditAccounts.forEach(creditAccount -> {
             creditAccount.setBankName(bank.getName());
-            //creditAccount.setId(id++);
-            creditAccount.setUser(user);
             creditAccount.getPaymentAccount().setBank(bank.getName());
             var newEmployeeList = employeeRepository.findAllCreditAvailableByBank(bank);
             creditAccount.setCreditor(newEmployeeList.get(0));
         });
         creditAccountRepository.save(creditAccounts);
-        user.setCreditAccounts(creditAccounts);
+        user.getCreditAccounts().addAll(creditAccounts);
         return true;
     }
 
@@ -132,12 +130,10 @@ public class BankServiceImpl implements BankService {
         List<PaymentAccount> paymentAccounts = objectMapper.readValue(file, new TypeReference<>(){});
 
         paymentAccounts.forEach(paymentAccount -> {
-            paymentAccount.setUser(user);
-            //paymentAccount.setId(id++);
             paymentAccount.setBank(bank.getName());
         });
         paymentAccountRepository.save(paymentAccounts);
-        user.setPaymentAccounts(paymentAccounts);
+        user.getPaymentAccounts().addAll(paymentAccounts);
         return false;
     }
 
