@@ -1,10 +1,13 @@
 package tech.reliab.course.mennibayevat.bank.entity;
 
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 import tech.reliab.course.mennibayevat.bank.utils.enums.BankOfficeStatus;
+
+import java.util.List;
 
 @Data
 @Accessors(chain = true)
@@ -16,7 +19,7 @@ public class BankOffice {
     private String address;
     private BankOfficeStatus status;
     private Boolean accommodateAtmAvailable;
-    private Integer atmCount;
+    private List<BankAtm> atms;
     private Boolean creditAvailable;
     private Boolean isWithdraw;
     private Boolean isDeposit;

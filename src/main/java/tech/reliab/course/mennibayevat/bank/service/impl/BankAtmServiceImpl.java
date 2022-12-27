@@ -34,7 +34,7 @@ public class BankAtmServiceImpl implements BankAtmService {
                 .setMaintenancePrice(random.nextInt(10000));
 
         bankAtmRepository.addEntity(bankAtm);
-        bankService.addAtm(bank);
+        bankService.addAtm(bank, bankAtm);
 
         return bankAtm;
     }
@@ -49,7 +49,7 @@ public class BankAtmServiceImpl implements BankAtmService {
     public void delete(BankAtm bankAtm) {
 
         bankAtmRepository.delete(bankAtm);
-        bankService.deleteAtm(bankAtm.getBankOwner());
+        bankService.deleteAtm(bankAtm.getBankOwner(), bankAtm);
 
     }
 

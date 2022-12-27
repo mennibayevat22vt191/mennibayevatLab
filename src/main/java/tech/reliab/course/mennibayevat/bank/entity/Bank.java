@@ -5,6 +5,8 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 
+import java.util.List;
+
 
 @Data
 @Accessors(chain = true)
@@ -13,10 +15,10 @@ import lombok.experimental.Accessors;
 public class Bank {
     private Long id;
     private String name;
-    private Integer officeCount;
-    private Integer atmCount;
-    private Integer employeeCount;
-    private Integer clientCount;
+    private List<BankOffice> offices;
+    private List<BankAtm> atms;
+    private List<Employee> employees;
+    private List<User> clients;
     private Integer rate;
     private Long moneyStock;
     private Integer interestRate;

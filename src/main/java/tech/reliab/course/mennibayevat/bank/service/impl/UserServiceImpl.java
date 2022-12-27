@@ -31,6 +31,7 @@ public class UserServiceImpl implements UserService {
         List<PaymentAccount> paymentAccounts = new ArrayList<>();
         List<CreditAccount> creditAccounts = new ArrayList<>();
         List<Bank> banks = new ArrayList<>();
+
         var user = new User()
                 .setId(id++)
                 .setFullName(fullName)
@@ -43,7 +44,7 @@ public class UserServiceImpl implements UserService {
                 .setCreditAccounts(creditAccounts);
 
         userRepository.addEntity(user);
-        bankService.addClient(bank);
+        bankService.addClient(bank, user);
 
         return user;
     }
@@ -80,7 +81,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void delete(User user) {
         user.getBanks()
-                .forEach(bank -> bankService.deleteClient(bank));
+                .forEach(bank -> bankService.deleteClient(bank, user));
         userRepository.delete(user);
     }
 

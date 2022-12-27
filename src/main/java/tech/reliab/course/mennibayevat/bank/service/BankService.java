@@ -1,8 +1,8 @@
 package tech.reliab.course.mennibayevat.bank.service;
 
-import tech.reliab.course.mennibayevat.bank.entity.Bank;
-import tech.reliab.course.mennibayevat.bank.entity.BankAtm;
-import tech.reliab.course.mennibayevat.bank.entity.User;
+
+
+import tech.reliab.course.mennibayevat.bank.entity.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -32,19 +32,19 @@ public interface BankService {
      */
     boolean migrateUsersPaymentAccountsFromFile(User user, Bank bank, String filename) throws IOException;
 
-    void addAtm(Bank bank);
+    void addAtm(Bank bank, BankAtm atm);
 
-    void deleteAtm(Bank bank);
+    void deleteAtm(Bank bank, BankAtm atm);
 
-    void addBankOffice(Bank bank);
+    void addBankOffice(Bank bank, BankOffice office);
 
-    void deleteBankOffice(Bank bank);
+    void deleteBankOffice(Bank bank, BankOffice office);
 
-    void addEmployee(Bank bank);
+    void addEmployee(Bank bank, Employee employee);
 
-    void deleteEmployee(Bank bank);
+    void deleteEmployee(Bank bank, Employee employee);
 
-    void addClient(Bank bank);
+    void addClient(Bank bank, User client);
 
-    void deleteClient(Bank bank);
+    void deleteClient(Bank bank, User client);
 }

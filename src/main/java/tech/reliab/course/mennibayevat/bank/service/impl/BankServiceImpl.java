@@ -29,13 +29,18 @@ public class BankServiceImpl implements BankService {
         Random random = new Random();
         var rate = random.nextInt(100);
 
+        List<BankOffice> offices = new ArrayList<>();
+        List<BankAtm> atms = new ArrayList<>();
+        List<Employee> employees = new ArrayList<>();
+        List<User> clients = new ArrayList<>();
+
         var bank = new Bank()
                 .setId(id++)
                 .setName(name)
-                .setOfficeCount(0)
-                .setAtmCount(0)
-                .setEmployeeCount(0)
-                .setClientCount(0)
+                .setOffices(offices)
+                .setAtms(atms)
+                .setEmployees(employees)
+                .setClients(clients)
                 .setRate(rate)
                 .setMoneyStock(random.nextLong(1_000_000L))
                 .setInterestRate((int) (20 - rate / 10D));
@@ -67,9 +72,9 @@ public class BankServiceImpl implements BankService {
     @Override
     public String bankInfo(String name) {
         var bank = getByName(name);
-        return "\nБанк" + name + ":\n" + "id=" + bank.getId() + "\nколичество банков=" + bank.getOfficeCount() +
-                "\nколичество банкоматов=" + bank.getAtmCount() + "\nколичество работников=" + bank.getEmployeeCount() +
-                "\nколичество клиентов=" + bank.getClientCount() + "\nрейтинг=" + bank.getRate() + "\nсредства=" +
+        return "\nБанк" + name + ":\n" + "id=" + bank.getId() + "\nколичество банков=" + bank.getOffices().size() +
+                "\nколичество банкоматов=" + bank.getAtms().size() + "\nколичество работников=" + bank.getEmployees().size() +
+                "\nколичество клиентов=" + bank.getClients().size() + "\nрейтинг=" + bank.getRate() + "\nсредства=" +
                 bank.getMoneyStock() + "\nПроцентная ставка=" + bank.getInterestRate() + "%\n\n";
     }
 
@@ -78,9 +83,9 @@ public class BankServiceImpl implements BankService {
         var banks = bankRepository.getBanks();
         Bank bestBank = banks.get(0);
         for (Bank bank : banks) {
-            if (bestBank.getAtmCount() < bank.getAtmCount() &&
-                    bestBank.getEmployeeCount() < bank.getEmployeeCount()) {
-                if (bestBank.getOfficeCount() < bank.getOfficeCount()) {
+            if (bestBank.getAtms().size() < bank.getAtms().size() &&
+                    bestBank.getEmployees().size() < bank.getEmployees().size()) {
+                if (bestBank.getOffices().size() < bank.getOffices().size()) {
                     bestBank = bank;
                 } else if (bestBank.getInterestRate() < bank.getInterestRate()) {
                     bestBank = bank;
@@ -140,58 +145,50 @@ public class BankServiceImpl implements BankService {
      * Related entities methods
      */
     @Override
-    public void addAtm(Bank bank) {
-        var bankAtmCount = bank.getAtmCount();
-        bank.setAtmCount(++bankAtmCount);
+    public void addAtm(Bank bank, BankAtm atm) {
+        bank.getAtms().add(atm);
         this.update(bank);
     }
 
     @Override
-    public void deleteAtm(Bank bank) {
-        var bankAtmCount = bank.getAtmCount();
-        bank.setAtmCount(--bankAtmCount);
+    public void deleteAtm(Bank bank, BankAtm atm) {
+        bank.getAtms().remove(atm);
         this.update(bank);
     }
 
     @Override
-    public void addBankOffice(Bank bank) {
-        var officeCount = bank.getOfficeCount();
-        bank.setOfficeCount(++officeCount);
+    public void addBankOffice(Bank bank, BankOffice office) {
+        bank.getOffices().add(office);
         this.update(bank);
     }
 
     @Override
-    public void deleteBankOffice(Bank bank) {
-        var officeCount = bank.getOfficeCount();
-        bank.setOfficeCount(--officeCount);
+    public void deleteBankOffice(Bank bank, BankOffice office) {
+        bank.getOffices().remove(office);
         this.update(bank);
     }
 
     @Override
-    public void addEmployee(Bank bank) {
-        var employeeCount = bank.getEmployeeCount();
-        bank.setEmployeeCount(++employeeCount);
+    public void addEmployee(Bank bank, Employee employee) {
+        bank.getEmployees().add(employee);
         this.update(bank);
     }
 
     @Override
-    public void deleteEmployee(Bank bank) {
-        var employeeCount = bank.getEmployeeCount();
-        bank.setEmployeeCount(--employeeCount);
+    public void deleteEmployee(Bank bank, Employee employee) {
+        bank.getEmployees().remove(employee);
         this.update(bank);
     }
 
     @Override
-    public void addClient(Bank bank) {
-        var clientCount = bank.getClientCount();
-        bank.setClientCount(++clientCount);
+    public void addClient(Bank bank, User client) {
+        bank.getClients().add(client);
         this.update(bank);
     }
 
     @Override
-    public void deleteClient(Bank bank) {
-        var clientCount = bank.getClientCount();
-        bank.setClientCount(--clientCount);
+    public void deleteClient(Bank bank, User client) {
+        bank.getClients().remove(client);
         this.update(bank);
     }
 

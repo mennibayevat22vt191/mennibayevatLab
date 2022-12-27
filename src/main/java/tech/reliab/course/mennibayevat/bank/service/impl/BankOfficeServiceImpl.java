@@ -2,6 +2,7 @@ package tech.reliab.course.mennibayevat.bank.service.impl;
 
 import lombok.AllArgsConstructor;
 import tech.reliab.course.mennibayevat.bank.entity.Bank;
+import tech.reliab.course.mennibayevat.bank.entity.BankAtm;
 import tech.reliab.course.mennibayevat.bank.entity.BankOffice;
 import tech.reliab.course.mennibayevat.bank.entity.Employee;
 import tech.reliab.course.mennibayevat.bank.repository.BankOfficeRepository;
@@ -10,6 +11,7 @@ import tech.reliab.course.mennibayevat.bank.service.BankOfficeService;
 import tech.reliab.course.mennibayevat.bank.service.BankService;
 import tech.reliab.course.mennibayevat.bank.utils.enums.BankOfficeStatus;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
@@ -28,13 +30,15 @@ public class BankOfficeServiceImpl implements BankOfficeService {
     public BankOffice create(String name, String address, Bank bank) {
         Random random = new Random();
 
+        List<BankAtm> atms = new ArrayList<>();
+
         var bankOffice = new BankOffice()
                 .setId(id++)
                 .setName(name)
                 .setAddress(address)
                 .setStatus(BankOfficeStatus.getRandomStatus())
                 .setAccommodateAtmAvailable(random.nextBoolean())
-                .setAtmCount(bank.getAtmCount())
+                .setAtms(atms)
                 .setCreditAvailable(random.nextBoolean())
                 .setIsWithdraw(random.nextBoolean())
                 .setIsDeposit(random.nextBoolean())
@@ -42,7 +46,7 @@ public class BankOfficeServiceImpl implements BankOfficeService {
                 .setRental(random.nextInt(100_000))
                 .setBank(bank);
         bankOfficeRepository.addEntity(bankOffice);
-        bankService.addBankOffice(bank);
+        bankService.addBankOffice(bank, bankOffice);
 
         return bankOffice;
     }
@@ -78,6 +82,6 @@ public class BankOfficeServiceImpl implements BankOfficeService {
     public void delete(BankOffice bankOffice) {
 
         bankOfficeRepository.addEntity(bankOffice);
-        bankService.deleteBankOffice(bankOffice.getBank());
+        bankService.deleteBankOffice(bankOffice.getBank(), bankOffice);
     }
 }

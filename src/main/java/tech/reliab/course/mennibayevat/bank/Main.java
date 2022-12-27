@@ -117,6 +117,8 @@ public class Main {
                 100_000L, 1000L,
                 employeeService.getRandomEmployeeByBank(bankService.getByName("Банк " + 3)),
                 userService.getRandomPaymentAccount(user, "Банк " + 3));
+
+
         transferAccounts(user);
     }
 

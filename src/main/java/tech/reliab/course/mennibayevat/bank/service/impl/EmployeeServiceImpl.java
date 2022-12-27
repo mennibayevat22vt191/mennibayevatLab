@@ -35,7 +35,7 @@ public class EmployeeServiceImpl implements EmployeeService {
                 .setIsMakeLoan(random.nextBoolean())
                 .setSalary(random.nextInt(100_000));
         employeeRepository.addEntity(employee);
-        bankService.addEmployee(bank);
+        bankService.addEmployee(bank, employee);
 
         return employee;
     }
@@ -65,6 +65,6 @@ public class EmployeeServiceImpl implements EmployeeService {
     public void delete(Employee employee) {
 
         employeeRepository.delete(employee);
-        bankService.deleteEmployee(employee.getBank());
+        bankService.deleteEmployee(employee.getBank(), employee);
     }
 }
